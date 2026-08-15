@@ -156,15 +156,24 @@ From `spi_master.h`/`spi_common.h`/`spi_types.h`:
   for compilation (only linking, which isn't attempted until later
   stages).
 
-### Stage 3 — Bus: `spi_bus_initialize`/`spi_bus_free`
+### Stage 3 — Bus: `spi_bus_initialize`/`spi_bus_free` ✅
+`src/espidf-driver-spi-master.ads`/`.adb`:
 - Opaque `Storage_Array`-backed `spi_bus_config_t`, sized via
-  `__ada_sizeof_spi_bus_config_t`.
-- `Initialize` procedure exposing the v1 field scope above; GPIO params
-  typed `ESPIDF.Driver.gpio_num_t`.
-- `spi_bus_initialize`/`spi_bus_free` as direct-named functions
-  returning `esp_err_t` — note `spi_bus_free` only takes `host_id`, no
-  handle, so this is simpler than I2C's bus (no null-out-on-success
-  needed).
+  `__ada_sizeof_spi_bus_config_t` (`Link_Name`, matching I2C's private
+  sizeof-import style).
+- `Initialize` procedure exposing the v1 field scope (`mosi_io_num`,
+  `miso_io_num`, `sclk_io_num`, `quadwp_io_num`, `quadhd_io_num`,
+  `max_transfer_sz`); GPIO params typed `gpio_num_t` (visible without a
+  `with` — direct parent-package visibility from `ESPIDF.Driver`), all
+  defaulting to `-1` ("unused"); `max_transfer_sz` defaults to `0` (let
+  the driver pick 4092-with-DMA / `SOC_SPI_MAXIMUM_BUFFER_SIZE`-without).
+- `spi_bus_initialize`/`spi_bus_free` declared directly in the `.ads` as
+  plain `Import`s (`Link_Name`, matching I2C's direct-function-import
+  style) — no wrapper body needed, unlike `Initialize`, since neither
+  takes a `Duration`/`Boolean` needing conversion.
+- Confirmed while writing this: `spi_bus_free` only takes `host_id`, no
+  handle — no null-out-on-success wrapper needed, genuinely simpler than
+  I2C's bus as anticipated.
 
 ### Stage 4 — Device: `spi_bus_add_device`/`spi_bus_remove_device`
 - Opaque `Storage_Array`-backed `spi_device_interface_config_t`, sized
