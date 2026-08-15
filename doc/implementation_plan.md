@@ -138,7 +138,7 @@ From `spi_master.h`/`spi_common.h`/`spi_types.h`:
   placeholder now.
 
 ### Stage 2 — `ESPIDF.Driver.SPI` — shared types ✅
-`source/espidf-driver-spi.ads`:
+`src/espidf-driver-spi.ads`:
 - `spi_host_device_t` → hand-mirrored `SPI1_Host`/`SPI2_Host`/
   `SPI3_Host` enum (confirmed stable: 0/1/2).
 - `spi_dma_chan_t` (`spi_common_dma_t`) → also a plain stable enum,
@@ -190,7 +190,7 @@ From `spi_master.h`/`spi_common.h`/`spi_types.h`:
   pattern. Remember `length`/`rxlength` are bits: multiply by 8 going in,
   divide coming out.
 
-### Stage 6 — C shim (`source/ada_espidf_spi_master.c`)
+### Stage 6 — C shim (`src/ada_espidf_spi_master.c`)
 `__ada_sizeof_spi_bus_config_t`, `__ada_sizeof_spi_device_interface_config_t`
 (and `__ada_sizeof_spi_transaction_t` if Stage 5 goes the opaque-blob
 route), matching `__ada_*__initialize` field-setters, `__enum_SPI_CLK_SRC_*`

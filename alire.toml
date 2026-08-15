@@ -10,7 +10,7 @@ authors = ["RREE"]
 maintainers = ["RREE <rolf.ebert.gcc@gmx.de>"]
 maintainers-logins = ["RREE"]
 licenses = "Apache-2.0 WITH LLVM-exception"
-tags = ["embedded", "esp32", "espidf", "driver", "spi"]
+tags = ["embedded", "esp32", "espidf", "esp-idf", "driver", "spi"]
 
 [configuration]
 generate_ada = false

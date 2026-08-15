@@ -18,12 +18,11 @@ package ESPIDF.Driver.SPI with Pure is
    --  is the ESP-IDF-recommended default on all current targets.
 
    type soc_periph_spi_clk_src_t is new int;
-   --  Values are not guaranteed-stable small ints across ESP-IDF/SoC
-   --  versions (aliases of the shared SOC_MOD_CLK_* clock-mux enum), so
-   --  they are imported from the C shim rather than hand-copied --
-   --  mirrors ESPIDF.Driver.I2C.Master's soc_periph_i2c_clk_src_t.
+   --  Values are imported from the C shim.
+
    SPI_CLK_SRC_DEFAULT : constant soc_periph_spi_clk_src_t
      with Import, Convention => C, External_Name => "__enum_SPI_CLK_SRC_DEFAULT";
+
    SPI_CLK_SRC_APB     : constant soc_periph_spi_clk_src_t
      with Import, Convention => C, External_Name => "__enum_SPI_CLK_SRC_APB";
    --  On ESP32 both currently alias the same underlying value

@@ -1,10 +1,8 @@
 --
---  Copyright (C) 2026, RREE
+--  Copyright (C) 2026, Rolf Ebert
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
-
-with "config/espidf_driver_spi_config.gpr";
 
 with "espidf.gpr";
 
@@ -14,7 +12,7 @@ library project ESPIDF_Driver_SPI is
    for Library_Name use "espidf_driver_spi";
    for Library_Dir use ESPIDF.Crate_Library_Dir;
    for Object_Dir use ESPIDF.Crate_Object_Dir;
-   for Source_Dirs use ("source");
+   for Source_Dirs use ("src");
 
    package Compiler extends ESPIDF.Compiler is
    end Compiler;
