@@ -1,0 +1,21 @@
+name = "espidf_driver_spi"
+version = "0.1.0-dev"
+website = "https://github.com/RREE/espidf_driver_spi"
+description = "Ada/ESP-IDF SPI master driver"
+long-description = """
+Ada bindings for the ESP-IDF esp_driver_spi component. This crate provides a native Ada interface for SPI master operations, compatible with ESP-IDF v6.0 and later.
+"""
+
+authors = ["RREE"]
+maintainers = ["RREE <rolf.ebert.gcc@gmx.de>"]
+maintainers-logins = ["RREE"]
+licenses = "Apache-2.0 WITH LLVM-exception"
+tags = ["embedded", "esp32", "espidf", "driver", "spi"]
+
+[configuration]
+generate_ada = false
+generate_c = false
+generate_gpr = true
+
+[[depends-on]]
+espidf = "*"

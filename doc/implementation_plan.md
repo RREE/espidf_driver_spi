@@ -11,7 +11,7 @@ Two crates, longer-term:
 
 ```
 espidf_driver_spi   -- thin, faithful binding to ESP-IDF's driver/spi_master.h (this repo, now)
-espidf_hal_spi       -- adapter: implements Ada_Drivers_Library's HAL.SPI on top of it (later, Stage 9)
+espidf_hal_spi      -- adapter: implements Ada_Drivers_Library's HAL.SPI on top of it (later, Stage 9)
 ```
 
 `espidf_driver_spi` depends on `espidf` (root types/error code), exactly
@@ -53,12 +53,11 @@ like `espidf_driver_i2c` does.
   (SoC-clock-source enums) get the same treatment via `__enum_<NAME>`
   exported constants rather than hand-copied numeric literals.
 - **Build**: mixed Ada+C `library project`, `with "espidf.gpr"`, extends
-  `ESPIDF.Compiler`, `Library_Name` `"adaespidf_driver_spi"` (avoids
-  colliding with the ESP-IDF C component of a similar name).
-- **`alire.toml`**: minimal — `depends-on espidf = "*"`, `generate_gpr =
-  true`, a `[[actions]] type = "test"` pointing at a `selftest/`
-  subdirectory (its own nested Alire project, built as an ESP-IDF app for
-  on-target testing).
+  `ESPIDF.Compiler`, `Library_Name` `"espidf_driver_spi"` — deliberately
+  *not* `ada`-prefixed like `espidf_driver_i2c`'s `"adaespidf_driver_i2c"`;
+  our own choice, diverging from that convention.
+- **`alire.toml`**: minimal — `depends-on espidf = "*"`. No `selftest/`
+  for now (deferred, see Stage 1 note below and Stage 7).
 
 ### Why `espidf_hal_spi` is a separate crate (Stage 9)
 
@@ -126,15 +125,17 @@ From `spi_master.h`/`spi_common.h`/`spi_types.h`:
 
 ## Staged plan
 
-### Stage 1 — Crate skeleton
+### Stage 1 — Crate skeleton ✅
 - `alire.toml` mirroring `espidf_driver_i2c`'s structure (see
   conventions above); tags `["embedded", "esp32", "espidf", "driver",
   "spi"]`.
-- `espidf_driver_spi.gpr` mirroring `espidf_driver_i2c.gpr`.
-- `selftest/` skeleton, adapted from `espidf_driver_i2c`'s.
-- Confirm `espidf` (and its transitive deps) resolve via the Alire
-  community index with a plain `depends-on`, or need a `[[pins]]`/git
-  dependency the way our `espidf_gnat_runtime` chain did.
+- `espidf_driver_spi.gpr` mirroring `espidf_driver_i2c.gpr`, except
+  `Library_Name` `"espidf_driver_spi"` (no `ada` prefix — our choice).
+- `espidf` confirmed published in the Alire index (0.1.0) — plain
+  `depends-on espidf = "*"` resolves with no pins needed.
+- `selftest/` deliberately **not** created yet — deferred to Stage 7
+  alongside the real selftest content, rather than scaffolding an empty
+  placeholder now.
 
 ### Stage 2 — `ESPIDF.Driver.SPI` — shared types
 - `spi_host_device_t` → hand-mirrored `SPI1_Host`/`SPI2_Host`/
