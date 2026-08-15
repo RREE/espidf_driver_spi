@@ -137,11 +137,24 @@ From `spi_master.h`/`spi_common.h`/`spi_types.h`:
   alongside the real selftest content, rather than scaffolding an empty
   placeholder now.
 
-### Stage 2 — `ESPIDF.Driver.SPI` — shared types
+### Stage 2 — `ESPIDF.Driver.SPI` — shared types ✅
+`source/espidf-driver-spi.ads`:
 - `spi_host_device_t` → hand-mirrored `SPI1_Host`/`SPI2_Host`/
-  `SPI3_Host` enum.
-- Confirm real `SPI_CLK_SRC_*` symbol names and `spi_dma_chan_t` values;
-  add `__enum_*` shim entries for the clock-source enum.
+  `SPI3_Host` enum (confirmed stable: 0/1/2).
+- `spi_dma_chan_t` (`spi_common_dma_t`) → also a plain stable enum,
+  confirmed no shim needed either: `SPI_DMA_DISABLED=0`,
+  `SPI_DMA_CH1=1`/`CH2=2` (ESP32-only legacy, `#if
+  CONFIG_IDF_TARGET_ESP32` — not exposed in v1), `SPI_DMA_CH_AUTO=3`
+  (exposed).
+- `soc_periph_spi_clk_src_t`: confirmed it *does* need the `__enum_*`
+  shim treatment — on ESP32 it only has `SPI_CLK_SRC_DEFAULT`/
+  `SPI_CLK_SRC_APB`, both aliasing the shared `SOC_MOD_CLK_APB` value,
+  not a value safe to hand-copy. Declared as `Import`ed constants
+  (`__enum_SPI_CLK_SRC_DEFAULT`/`__enum_SPI_CLK_SRC_APB`); the actual C
+  shim providing those symbols is still Stage 6 — this only declares the
+  Ada side, consistent with `.ads`-before-shim ordering not mattering
+  for compilation (only linking, which isn't attempted until later
+  stages).
 
 ### Stage 3 — Bus: `spi_bus_initialize`/`spi_bus_free`
 - Opaque `Storage_Array`-backed `spi_bus_config_t`, sized via
